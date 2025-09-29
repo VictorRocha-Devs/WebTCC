@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informações do Evento</title>
+    <link rel="stylesheet" href="info.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="container">
+        <img src="./img/1-removebg-preview.png" alt="Logo" class="cal_logo">
+        <h1 id="titulo-evento">Eventos</h1>
+        <h2 id="data-evento">AAAA/MM/DD</h2>
+        <div id="eventos-lista"></div>
+        <div class="local_map">
+            <div class="info_map">
+                <h3>Localização:</h3>
+            </div>
+            <iframe class="map" src="" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+    <script>
+        // Função para formatar data
+        function formatarData(data) {
+            const [ano, mes, dia] = data.split('-');
+            return `${dia}/${mes}/${ano}`;
+        }
+
+        // Carrega eventos do backend
+        async function carregarEventos() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const data = urlParams.get('data');
+            if (!data) {
+                document.getElementById('eventos-lista').innerHTML = '<p>Nenhuma data selecionada.</p>';
+                return;
+            }
+
+            document.getElementById('data-evento').textContent = formatarData(data);
+
+            try {
+                const response = await fetch(`/api/eventos?data=${data}`);
+                const eventos = await response.json();
+
+                if (response.ok && eventos.length > 0) {
+                    const eventosLista = document.getElementById('eventos-lista');
+                    eventosLista.innerHTML = eventos.map(evento => `
+                        <div class="info_map">
+                            <h3>Evento: ${evento.tituloEvento}</h3>
+                            <p><strong>Horário:</strong> ${evento.horarioEvento || 'Não especificado'}</p>
+                            <p><strong>Descrição:</strong> ${evento.descricaoEvento || 'Sem descrição'}</p>
+                            <p><strong>Participações Especiais:</strong> ${evento.participantes || 'Nenhum participante'}</p>
+                            <p><strong>Localização:</strong> ${evento.enderecoEvento || 'Não especificado'}</p>
+                        </div>
+                    `).join('');
+                    // Atualiza o mapa com o endereço do primeiro evento (sem chave da API)
+                    if (eventos[0].enderecoEvento) {
+                        const mapaUrl = `https://www.google.com/maps?q=${encodeURIComponent(eventos[0].enderecoEvento)}&output=embed`;
+                        document.querySelector('.map').src = mapaUrl;
+                    }
+                } else {
+                    document.getElementById('eventos-lista').innerHTML = '<p>Nenhum evento encontrado para esta data.</p>';
+                }
+            } catch (error) {
+                document.getElementById('eventos-lista').innerHTML = '<p>Erro ao carregar eventos.</p>';
+                console.error('Erro:', error);
+            }
+        }
+
+        carregarEventos();
+    </script>
+</body>
+</html>

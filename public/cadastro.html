@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="cadastro.css">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <img src="./img/1-removebg-preview.png" alt="Logo" class="logo">
+        <h1>Cadastrar-se</h1>
+        <form id="form-cadastro" action="/cadastro" method="POST">
+
+            <!-- Nome -->
+            <div class="input-box">
+                <input type="text" name="nome" placeholder="Nome" required
+                       pattern="[A-Za-zÀ-ÖØ-öø-ÿ\s]{3,50}"
+                       title="Use apenas letras e espaços (3 a 50 caracteres)">
+                <i class='bx bxs-user'></i>
+            </div>
+
+            <!-- E-mail -->
+            <div class="input-box">
+                <input type="email" name="email" placeholder="E-mail" required>
+                <i class='bx bxs-envelope'></i>
+            </div>
+
+            <!-- Senha -->
+            <div class="input-box">
+                <input type="password" name="senha" placeholder="Senha" required
+                       pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}"
+                       title="Use 8+ caracteres, incluindo maiúscula, minúscula, número e símbolo">
+                <i class='bx bxs-lock-alt'></i>
+            </div>
+
+            <!-- Confirmar senha -->
+            <div class="input-box">
+                <input type="password" name="confirmar_senha" placeholder="Confirmar Senha" required
+                       pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}"
+                       title="Repita a mesma senha">
+                <i class='bx bxs-lock-alt'></i>
+            </div>
+
+            <div class="remember-forgot">
+                <label><input type="checkbox" name="lembrar"> Lembrar a senha</label>
+                <a href="#">Esqueci a senha</a>
+            </div>
+
+            <button type="submit" class="register">Cadastrar-se</button>
+
+            <!-- Onde o backend mostra mensagens -->
+            <div id="mensagem" style="margin-top:10px;"></div>
+
+            <div class="login-link">
+                <p>Já tem uma conta? <a href="/public/login.html">Faça o login</a></p>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Captura mensagens enviadas pelo backend (?mensagem=...&tipo=...)
+        const urlParams = new URLSearchParams(window.location.search);
+        const mensagem = urlParams.get("mensagem");
+        const tipo = urlParams.get("tipo");
+
+        if (mensagem) {
+            const mensagemDiv = document.getElementById("mensagem");
+            mensagemDiv.textContent = mensagem;
+            mensagemDiv.style.color = tipo === "sucesso" ? "#6750a4" : "#d32f2f";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário</title>
+    <link rel="stylesheet" href="cal.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="calendar-container">
+        <img src="./img/1-removebg-preview.png" alt="Logo" class="custom-logo">
+        <div class="date-display">Qui, Ago 17</div>
+        <div class="month-navigation">
+            <span class="month-year">Agosto 2025 <i class="material-icons">arrow_drop_down</i></span>
+            <div>
+                <i class="material-icons nav-arrow" id="prev-month">chevron_left</i>
+                <i class="material-icons nav-arrow" id="next-month">chevron_right</i>
+            </div>
+        </div>
+        <div class="days-grid">
+            <div class="day-header">D</div>
+            <div class="day-header">S</div>
+            <div class="day-header">T</div>
+            <div class="day-header">Q</div>
+            <div class="day-header">Q</div>
+            <div class="day-header">S</div>
+            <div class="day-header">S</div>
+            <!-- Dias do calendário -->
+            <div class="day-cell other-month"></div>
+            <div class="day-cell other-month"></div>
+            <div class="day-cell other-month"></div>
+            <div class="day-cell other-month"></div>
+            <div class="day-cell">1</div>
+            <div class="day-cell">2</div>
+            <div class="day-cell">3</div>
+            <div class="day-cell">4</div>
+            <div class="day-cell">5</div>
+            <div class="day-cell">6</div>
+            <div class="day-cell">7</div>
+            <div class="day-cell">8</div>
+            <div class="day-cell">9</div>
+            <div class="day-cell">10</div>
+            <div class="day-cell">11</div>
+            <div class="day-cell">12</div>
+            <div class="day-cell">13</div>
+            <div class="day-cell">14</div>
+            <div class="day-cell">15</div>
+            <div class="day-cell">16</div>
+            <div class="day-cell today selected">17</div>
+            <div class="day-cell">18</div>
+            <div class="day-cell">19</div>
+            <div class="day-cell">20</div>
+            <div class="day-cell">21</div>
+            <div class="day-cell">22</div>
+            <div class="day-cell">23</div>
+            <div class="day-cell">24</div>
+            <div class="day-cell">25</div>
+            <div class="day-cell">26</div>
+            <div class="day-cell">27</div>
+            <div class="day-cell">28</div>
+            <div class="day-cell">29</div>
+            <div class="day-cell">30</div>
+            <div class="day-cell">31</div>
+            <div class="day-cell other-month"></div>
+            <div class="day-cell other-month"></div>
+        </div>
+    </div>
+    <script>
+        // Atualiza a data exibida
+        const dateDisplay = document.querySelector('.date-display');
+        const monthYear = document.querySelector('.month-year');
+        let currentDate = new Date(2025, 7, 17); // Agosto 2025
+
+        function updateCalendar() {
+            const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            const dayNames = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+            dateDisplay.textContent = `${dayNames[currentDate.getDay()]}, ${monthNames[currentDate.getMonth()]} ${currentDate.getDate()}`;
+            monthYear.textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+        }
+
+        // Navegação entre meses
+        document.getElementById('prev-month').addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            updateCalendar();
+            // TODO: Atualizar dias do calendário dinamicamente
+        });
+
+        document.getElementById('next-month').addEventListener('click', () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            updateCalendar();
+            // TODO: Atualizar dias do calendário dinamicamente
+        });
+
+        // Redireciona para info.html ao clicar em um dia
+        document.querySelectorAll('.day-cell').forEach(cell => {
+            cell.addEventListener('click', () => {
+                if (!cell.classList.contains('other-month')) {
+                    const day = cell.textContent.padStart(2, '0');
+                    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
+                    const year = currentDate.getFullYear();
+                    const date = `${year}-${month}-${day}`;
+                    window.location.href = `/info?data=${date}`;
+                }
+            });
+        });
+
+        updateCalendar();
+    </script>
+</body>
+</html>
